@@ -84,5 +84,6 @@
         <module>wl_eureka</module>
         <module>wl_api</module>
         <module>wl_db_version_provider</module>
+        <module>wl_db_version_consumer</module>
     </modules>
 </project>
