@@ -1,0 +1,71 @@
+# LiangYong
+# 2019/1/6
+# 11:43
+server:
+  port: 8081
+
+mybatis-plus:
+  #config-location: classpath:/mybatis/mybatis.cfg.xml      #MyBatis 配置文件位置
+  mapper-locations: classpath:/mybatis/mapper/*.xml         #MyBatis Mapper 所对应的 XML 文件位置
+  typeAliasesPackage: com.weilun.api.entity                 #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-super-type: java.lang.Object                 #该配置请和 typeAliasesPackage 一起使用，如果配置了该属性，则仅仅会扫描路径下以该类作为父类的域对象
+  #type-handlers-package: null                              #TypeHandler 扫描路径
+  #type-enums-package: null                                 #枚举类 扫描路径
+  check-config-location: false                              #启动时是否检查 MyBatis XML 文件的存在
+  executor-type: simple                                     #MyBatis 的执行器:
+  #                1、SIMPLE 该执行器类型不做特殊的事情，为每个语句的执行创建一个新的预处理语句
+  #                2、REUSE 该执行器类型会复用预处理语句（PreparedStatement）
+  #                3、BATCH 该执行器类型会批量执行所有的更新语句
+  configuration-properties: null                            #指定外部化 MyBatis Properties 配置，通过该配置可以抽离配置，实现不同环境的配置部署
+  configuration:                                            #进阶配置
+    map-underscore-to-camel-case: true                      #是否开启自动驼峰命名规则
+    aggressive-lazy-loading: true                           #当设置为 true 的时候，懒加载的对象可能被任何懒属性全部加载，否则，每个属性都按需加载
+    auto-mapping-behavior: partial                          #自动映射策略:
+    #            1、NONE：不启用自动映射
+    #            2、PARTIAL：只对非嵌套的 resultMap 进行自动映射
+    #            3、FULL：对所有的 resultMap 都进行自动映射
+    auto-mapping-unknown-column-behavior: none              #自动映射时未知列或未知属性处理策略：
+    #                               1、NONE：不做任何处理 (默认值)
+    #                               2、WARNING：以日志的形式打印相关警告信息
+    #                               3、FAILING：当作映射失败处理，并抛出异常和详细信息
+    cache-enabled: true                                     #全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存
+    call-setters-on-nulls: false                            #返回结果列中可以包含空值
+    #configuration-factory: null                            #Configuration 实例的工厂类
+  global-config:                                            #全局策略配置
+    #refresh: true                                          #是否自动刷新 Mapper 对应的 XML 文件(生产环境不能打开)
+    sql-parser-cache: false                                 #是否缓存 Sql 解析
+    #sql-session: null                                      #单例重用 SqlSession
+    #sql-session-factory: null                              #缓存当前 Configuration 的 SqlSessionFactory
+    db-config:                                              #DB 策略配置
+      capital-mode: false                                   #是否开启大写命名
+      column-like: false                                    #是否开启 LIKE 查询
+      db-type: mysql                                        #数据库类型
+      field-strategy: not_null                              #字段验证策略
+      id-type: id_worker                                    #全局默认主键类型
+      logic-delete-value: 1                                 #逻辑已删除值
+      logic-not-delete-value: 0                             #逻辑未删除值
+      #table-prefix: null                                   #表名前缀
+      table-underline: true                                 #表名、是否使用下划线命名
+
+spring:
+  application:
+    name: wl_db_version_provider
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
+    url: jdbc:mysql://localhost:3306/weilun?serverTimezone=GMT # 数据库名称
+    username: root
+    password: root
+    dbcp2:
+      min-idle: 5                                           # 数据库连接池的最小维持连接数
+      initial-size: 5                                       # 初始化连接数
+      max-total: 5                                          # 最大连接数
+      max-wait-millis: 200                                  # 等待连接获取的最大超时时间
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: wl_db_version_provider
+    prefer-ip-address: true                                   #访问路径可以显示IP地址
