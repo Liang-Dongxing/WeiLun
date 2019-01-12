@@ -80,10 +80,9 @@
     </dependencyManagement>
 
     <modules>
-
-        <module>wl_eureka</module>
-        <module>wl_api</module>
-        <module>wl_db_version_provider</module>
-        <module>wl_db_version_consumer</module>
+        <module>common/wl_api</module>
+        <module>discovery/wl_eureka</module>
+        <module>dbVersion/wl_db_version</module>
+        <module>dbVersion/wl_db_version_consumer</module>
     </modules>
 </project>

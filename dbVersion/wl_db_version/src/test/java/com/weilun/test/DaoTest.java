@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class DaoTest {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DaoTest.class);
+    private final Logger logger = LoggerFactory.getLogger(DaoTest.class);
 
     @Autowired
     private DbVersionService dbVersionService;
@@ -27,6 +27,6 @@ public class DaoTest {
     @Test
     public void getDbVersion() {
         DbVersion dbVersion = dbVersionService.getDbVersion();
-        LOGGER.info(dbVersion.toString());
+        logger.info(dbVersion.toString());
     }
 }

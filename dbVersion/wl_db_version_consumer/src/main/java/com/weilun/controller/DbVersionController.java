@@ -1,10 +1,10 @@
 package com.weilun.controller;
 
 import com.weilun.api.entity.DbVersion;
+import com.weilun.service.feign.DbVersionClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author LiangYong
@@ -15,17 +15,15 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/consumer")
 public class DbVersionController {
 
-    private static final String REST_URL_PREFIX = "http://WL-DB-VERSION-PROVIDER";
-
-    private final RestTemplate restTemplate;
+    private final DbVersionClientService dbVersionClientService;
 
     @Autowired
-    public DbVersionController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public DbVersionController(DbVersionClientService dbVersionClientService) {
+        this.dbVersionClientService = dbVersionClientService;
     }
 
     @RequestMapping(value = "/db/getOne")
     public DbVersion getDbVersion() {
-        return restTemplate.getForObject(REST_URL_PREFIX + "/db/getOne", DbVersion.class);
+        return dbVersionClientService.getDbVersion();
     }
 }
