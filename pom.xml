@@ -88,6 +88,7 @@
     <modules>
         <module>common/wl_api</module>
         <module>discovery/wl_eureka</module>
+        <module>discovery/wl_hystrix_dashboard</module>
         <module>dbVersion/wl_db_version</module>
         <module>dbVersion/wl_db_version_consumer</module>
     </modules>
