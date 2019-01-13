@@ -69,3 +69,9 @@ eureka:
   instance:
     instance-id: db-version
     prefer-ip-address: true                                   #访问路径可以显示IP地址
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
