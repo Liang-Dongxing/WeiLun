@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * 2019/1/12
  * 18:42
  **/
-@FeignClient(value = "DB-VERSION")
+@FeignClient(value = "DB-VERSION", fallbackFactory = DbVersionClientServiceFallbackFactory.class)
 public interface DbVersionClientService {
 
     @GetMapping(value = "/db/getOne")
