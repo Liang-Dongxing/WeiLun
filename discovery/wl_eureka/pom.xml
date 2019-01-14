@@ -10,7 +10,6 @@
     </parent>
     <artifactId>wl_eureka</artifactId>
     <dependencies>
-        <!--eureka-server服务端 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
