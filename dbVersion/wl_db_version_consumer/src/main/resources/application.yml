@@ -2,7 +2,11 @@
 # 2019/1/12
 # 16:16
 server:
-  port: 80
+  port: 37001
+
+spring:
+  application:
+    name: db-version-consumer
 
 feign:
   hystrix:
@@ -10,6 +14,7 @@ feign:
 
 eureka:
   client:
-    register-with-eureka: false
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:36001/eureka/
+  instance:
+    instance-id: db-version-consumer
