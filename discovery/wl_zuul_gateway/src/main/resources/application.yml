@@ -1,0 +1,23 @@
+# LiangYong
+# 2019/1/13
+# 16:15
+server:
+  port: 80
+
+spring:
+  application:
+    name: wl-zuul-gateway
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:36001/eureka/
+  instance:
+    instance-id: www.weilun.com
+    prefer-ip-address: true
+
+zuul:
+  ignored-services: "*"
+  routes:
+    mydept.serviceId: db-version-consumer
+    mydept.path: /dvc/**
