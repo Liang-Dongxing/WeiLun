@@ -49,20 +49,21 @@ public class CodeGenerator {
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
-        // 数据源配置
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/db_enterprise_index_7?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT");
-        // dsc.setSchemaName("t_name_index_full_8");
-        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("root");
-        mpg.setDataSource(dsc);
-
         // 包配置
         final PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
         pc.setParent("com.weilun.api.generator");
         mpg.setPackageInfo(pc);
+
+        // 数据源配置
+        DataSourceConfig dsc = new DataSourceConfig();
+        String database = scanner("库名");
+        dsc.setUrl("jdbc:mysql://localhost:3306/" + database + "?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT");
+        // dsc.setSchemaName("t_name_index_full_8");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
+        dsc.setUsername("root");
+        dsc.setPassword("root");
+        mpg.setDataSource(dsc);
 
         // 自定义配置
         InjectionConfig cfg = new InjectionConfig() {
@@ -83,7 +84,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
+                return projectPath + "/common/wl_api//src/main/resources/mapper/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
