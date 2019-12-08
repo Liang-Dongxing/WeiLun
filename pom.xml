@@ -9,16 +9,25 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>common/wl_api</module>
+        <module>discovery/wl_eureka</module>
+        <module>discovery/wl_hystrix_dashboard</module>
+        <module>discovery/wl_zuul_gateway</module>
+        <module>dbVersion/wl_db_version</module>
+        <module>dbVersion/wl_db_version_consumer</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.RELEASE</spring.cloud.version>
-        <mysql.version>8.0.13</mysql.version>
-        <druid.version>1.1.12</druid.version>
-        <mybatis.version>1.3.2</mybatis.version>
-        <mybatis.plus.version>3.0.7.1</mybatis.plus.version>
-        <lombok.version>1.18.4</lombok.version>
+        <mysql.version>5.1.9</mysql.version>
+        <druid.version>1.1.21</druid.version>
+        <mybatis.version>2.1.1</mybatis.version>
+        <mybatis.plus.version>3.3.0</mybatis.plus.version>
+        <lombok.version>1.18.10</lombok.version>
         <guava.version>28.1-jre</guava.version>
     </properties>
 
@@ -38,11 +47,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <optional>true</optional>
+            </dependency>
 
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.9</version>
+                <version>${mysql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -75,12 +89,26 @@
         </dependencies>
     </dependencyManagement>
 
-    <modules>
-        <module>common/wl_api</module>
-        <module>discovery/wl_eureka</module>
-        <module>discovery/wl_hystrix_dashboard</module>
-        <module>discovery/wl_zuul_gateway</module>
-        <module>dbVersion/wl_db_version</module>
-        <module>dbVersion/wl_db_version_consumer</module>
-    </modules>
+    <name>DongXing</name>
+    <description>个人项目</description>
+    <url>https://github.com/Liang-Dongxing/WeiLun.git</url>
+    <inceptionYear>2019</inceptionYear>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/Liang-Dongxing/WeiLun/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>LiangDongXing</name>
+        <url>https://github.com/Liang-Dongxing</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>DongXing</id>
+            <name>LiangYong</name>
+            <url>https://github.com/Liang-Dongxing</url>
+        </developer>
+    </developers>
+
 </project>
