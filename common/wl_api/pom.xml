@@ -40,7 +40,22 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.29</version>
         </dependency>
-
+        <!-- POI -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.1</version>
+        </dependency>
         <!--<dependency>-->
         <!--<groupId>com.google.guava</groupId>-->
         <!--<artifactId>guava</artifactId>-->
