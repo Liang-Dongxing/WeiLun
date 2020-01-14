@@ -36,60 +36,63 @@ public class POIWordUtils {
         StringBuilder title = new StringBuilder();
         StringBuilder labelStringLine = new StringBuilder();
         StringBuilder resultStringLine = new StringBuilder();
-        //给变量处理标题两次是否重复
-        byte thisFool = 0;
 
-        for (XWPFParagraph paragraph : paragraphs) {
+        for (int i = 0; i < paragraphs.size(); i++) {
+            XWPFParagraph paragraph = paragraphs.get(i);
             // 是否居中LEFT、CENTER、RIGHT
             String alignment = paragraph.getAlignment().toString();
             //当前段落文本
             String text = paragraph.getText().replaceAll("\\(\n \n\\)", "").strip();
-            if (determineLineBold(paragraph)) {
-                if (Pattern.matches(regular1 + regular2, text)) {
-                    String trim = text.replaceAll(regular1, "").trim();
-                    if (trim.length() == 4) {
-                        section.delete(0, section.length());
-                        section.append(trim).append(tab);
-                    }
-                }
-                if (paragraph.getNumID() != null) {
-                    String trim = text.trim();
-                    if (trim.length() == 4) {
-                        section.delete(0, section.length());
-                        section.append(trim).append(tab);
-                    }
-                }
-                if ("CENTER".equals(alignment)) {
-                    if (thisFool != 2) {
-                        thisFool = 2;
-                        title.delete(0, title.length());
-                    } else if (title.length() > 0) {
-                        title.delete(title.length() - 1, title.length());
-                    }
-                    title.append(text).append(tab);
-                }
-            }
-            if (Pattern.matches(label, text)) {
-                thisFool = 3;
-                labelStringLine.delete(0, labelStringLine.length());
-                labelStringLine.append(period).append(section).append(title);
-                if (!text.contains("本期编辑")){
-                    if (text.contains("，")) {
-                        String[] splits = text.replaceAll(String.format("[（%s|）]", labelString), "").split("，");
-                        for (String split : splits) {
-                            labelStringLine.append(split.trim()).append(tab);
+            if (Strings.isNotEmpty(text)){
+                if (determineLineBold(paragraph)) {
+                    if (Pattern.matches(regular1 + regular2, text)) {
+                        String trim = text.replaceAll(regular1, "").trim();
+                        if (trim.length() == 4) {
+                            section.delete(0, section.length());
+                            section.append(trim).append(tab);
                         }
-                        resultStringLine.append(labelStringLine).append("\n");
-                    } else if (text.contains(" ")) {
-                        String[] splits = text.replaceAll(String.format("[（%s|）]", labelString), "").split(" ");
-                        for (String split : splits) {
-                            labelStringLine.append(split.trim()).append(tab);
+                    }
+                    if (paragraph.getNumID() != null) {
+                        String trim = text.trim();
+                        if (trim.length() == 4) {
+                            section.append(trim).append(tab);
                         }
-                        resultStringLine.append(labelStringLine).append("\n");
+                    }
+                    if ("CENTER".equals(alignment) && title.length() == 0) {
+                        XWPFParagraph nextParagraph = paragraphs.get(i + 1);
+                        String nextAlignment = nextParagraph.getAlignment().toString();
+                        if ("CENTER".equals(nextAlignment)) {
+                            title.append(text).append(nextParagraph.getText()).append(tab);
+                        } else {
+                            title.append(text).append(tab);
+                        }
+                    }
+                }
+                if (Pattern.matches(label, text) && !determineLineBold(paragraph)) {
+                    labelStringLine.append(period).append(section).append(title);
+                    if (!text.contains("本期编辑")) {
+                        if (text.contains("，")) {
+                            String[] splits = text.replaceAll(String.format("[（%s|）]", labelString), "").split("，");
+                            for (String split : splits) {
+                                labelStringLine.append(split.trim()).append(tab);
+                            }
+                            resultStringLine.append(labelStringLine).append("\n");
+                            title.delete(0, title.length());
+                            labelStringLine.delete(0, labelStringLine.length());
+                        } else if (text.contains(" ")) {
+                            String[] splits = text.replaceAll(String.format("[（%s|）]", labelString), "").split(" ");
+                            for (String split : splits) {
+                                labelStringLine.append(split.trim()).append(tab);
+                            }
+                            resultStringLine.append(labelStringLine).append("\n");
+                            title.delete(0, title.length());
+                            labelStringLine.delete(0, labelStringLine.length());
+                        }
                     }
                 }
             }
         }
+
         fileInputStream.close();
         return resultStringLine.toString();
     }
@@ -105,8 +108,8 @@ public class POIWordUtils {
     }
 
     public static void main(String[] args) {
-        File files = new File("F:\\temp");
-        Path path = Paths.get("F:\\temp\\label.txt");
+        File files = new File("F:\\TRS\\TRS项目\\教育报\\教育改革情报word");
+        Path path = Paths.get("F:\\TRS\\TRS项目\\教育报\\label.txt");
         File[] listFiles = files.listFiles((dir, name) -> name.endsWith(".docx"));
         Pattern compile = Pattern.compile("\\d+");
         for (File file : listFiles) {
@@ -119,22 +122,18 @@ public class POIWordUtils {
             try {
                 if (qi >= 38 && qi <= 53) {
                     String wordContent = getWordContent(file, "标签：", qi);
-                    System.out.println(qi);
                     Files.writeString(path, wordContent, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
                 if (qi >= 54 && qi <= 69) {
                     String wordContent = getWordContent(file, "关键词：", qi);
-                    System.out.println(qi);
                     Files.writeString(path, wordContent, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
                 if (qi >= 70 && qi <= 297) {
-                    System.out.println(qi);
                     String wordContent = getWordContent(file, "关键词：", qi);
                     Files.writeString(path, wordContent, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
                 if (qi >= 298) {
                     String wordContent = getWordContent(file, "", qi);
-                    System.out.println(qi);
                     Files.writeString(path, wordContent, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
             } catch (IOException e) {
