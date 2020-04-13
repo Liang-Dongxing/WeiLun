@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class POIWordUtils {
+public class POIWordUtils1 {
 
 
     private static String regular1 = "[一二三四五六七八九十]、";
