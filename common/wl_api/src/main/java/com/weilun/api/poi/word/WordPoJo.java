@@ -10,6 +10,8 @@ public class WordPoJo {
     private String url;
     private String issue;
     private String date;
+    private String author;
+    private String keyword;
 
     public String getTitle() {
         return title;
@@ -61,5 +63,35 @@ public class WordPoJo {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    @Override
+    public String toString() {
+        return "WordPoJo{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", section='" + section + '\'' +
+                ", url='" + url + '\'' +
+                ", issue='" + issue + '\'' +
+                ", date='" + date + '\'' +
+                ", author='" + author + '\'' +
+                ", keyword='" + keyword + '\'' +
+                '}';
     }
 }
