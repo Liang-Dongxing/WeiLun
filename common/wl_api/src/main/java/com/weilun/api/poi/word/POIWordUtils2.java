@@ -1,6 +1,7 @@
 package com.weilun.api.poi.word;
 
 import org.apache.logging.log4j.util.Strings;
+import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -29,7 +30,7 @@ public class POIWordUtils2 {
     private static final String regular3 = "((\\d\\.)|(（[一二三四五六七八九十]）)).*";
     private static final String regular4 = "（[一二三四五六七八九十]）.{1,4}";
     private static final String regular5 = "\\d\\.";
-    private static final String regular6 = ".*\\d{4}年\\d{1,2}月\\d{1,2}日星期.";
+    private static final String regular6 = ".*\\d{4}年\\d{1,2}月\\d{1,2}日(星期.)?";
     private static final String regular7 = "\\d{4}年\\d{1,2}月\\d{1,2}日";
     private static final String regular8 = "（本期编辑：.*）";
 
@@ -40,6 +41,7 @@ public class POIWordUtils2 {
         XWPFDocument xwpfDocument = new XWPFDocument(fileInputStream);
         //获取段落集合9
         List<XWPFParagraph> paragraphs = xwpfDocument.getParagraphs();
+
         // 需要返回的内容
         StringBuilder section = new StringBuilder();
         String date = null;
@@ -52,6 +54,7 @@ public class POIWordUtils2 {
             String alignment = paragraph.getAlignment().toString();
             //当前段落文本
             String text = paragraph.getText().replaceAll("\\(\n \n\\)", "").strip();
+//            System.out.println(text);
             if (Strings.isNotEmpty(text)) {
                 if (wordPoJo == null && section.length() == 0 && Pattern.matches(regular6, text)) {
                     Pattern compile = Pattern.compile(regular7);
@@ -138,12 +141,14 @@ public class POIWordUtils2 {
     }
 
     public static void main(String[] args) {
+//        File files = new File("F:\\TRS\\TRS项目\\教育报\\教育改革情报word\\tt");
         File files = new File("F:\\TRS\\TRS项目\\教育报\\教育改革情报word\\tt");
         File[] listFiles = files.listFiles((dir, name) -> name.endsWith(".docx"));
         Pattern compile = Pattern.compile("\\d+");
         List<WordPoJo> wordPoJoSet = new LinkedList<>();
         for (File file : listFiles) {
             String fileName = file.getName();
+            System.out.println(fileName);
             Matcher matcher = compile.matcher(fileName);
             int qi = 0;
             if (matcher.find()) {
@@ -175,25 +180,30 @@ public class POIWordUtils2 {
         DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("y/M/d HH:mm:ss");
         for (int i = 0; i < wordPoJoSet.size(); i++) {
             WordPoJo wordPoJo = wordPoJoSet.get(i);
-            LocalDateTime localDateTime = LocalDate.parse(wordPoJo.getDate(), dateTimeFormatter1).atStartOfDay();
-            stringBuilder.append("<REC>=").append("\n");
-            stringBuilder.append("<RID>=").append(i + 1).append("\n");
-            stringBuilder.append("<SID>=").append(String.format("%s#%s", i + 1, wordPoJo.getIssue())).append("\n");
-            stringBuilder.append("<IR_URLTITLE>=").append(wordPoJo.getTitle()).append("\n");
-            stringBuilder.append("<IR_CONTENT>=").append(wordPoJo.getContent()).append("\n");
-            stringBuilder.append("<IR_SITENAME>=").append("教育改革情报").append("\n");
-            stringBuilder.append("<IR_SRCNAME>=").append(wordPoJo.getIssue()).append("\n");
-            stringBuilder.append("<IR_URLTIME>=").append(localDateTime.format(dateTimeFormatter2)).append("\n");
-            stringBuilder.append("<IR_AUTHORS>=").append(wordPoJo.getAuthor()).append("\n");
-            stringBuilder.append("<IR_CHANNEL>=").append(wordPoJo.getSection()).append("\n");
-            stringBuilder.append("<IR_KEYWORDS>=").append(wordPoJo.getKeyword()).append("\n");
 
-            stringBuilder.append("<SY_URLTIME_YMD>=").append(localDateTime.format(dateTimeFormatter2)).append("\n");
-            stringBuilder.append("<SY_URLTIME_YEAR>=").append(localDateTime.getYear()).append("\n");
-            stringBuilder.append("<SY_URLTIME_YM>=").append(localDateTime.getYear()).append(".").append(localDateTime.getMonthValue()).append("\n");
-            stringBuilder.append("<SY_URLTIME_YMDH>=").append(localDateTime.getYear()).append(".").append(localDateTime.getMonthValue()).append(".").append(localDateTime.getDayOfMonth()).append(" ").append(localDateTime.getHour()).append("\n");
+            if (Strings.isNotBlank(wordPoJo.getDate())) {
+                LocalDateTime localDateTime = LocalDate.parse(wordPoJo.getDate(), dateTimeFormatter1).atStartOfDay();
+                stringBuilder.append("<REC>=").append("\n");
+                stringBuilder.append("<RID>=").append(i + 1).append("\n");
+                stringBuilder.append("<SID>=").append(String.format("%s#%s", i + 1, wordPoJo.getIssue())).append("\n");
+                stringBuilder.append("<IR_URLTITLE>=").append(wordPoJo.getTitle()).append("\n");
+                stringBuilder.append("<IR_CONTENT>=").append(wordPoJo.getContent()).append("\n");
+                stringBuilder.append("<IR_SITENAME>=").append("教育改革情报").append("\n");
+                stringBuilder.append("<IR_SRCNAME>=").append(wordPoJo.getIssue()).append("\n");
+                stringBuilder.append("<IR_URLTIME>=").append(localDateTime.format(dateTimeFormatter2)).append("\n");
+                stringBuilder.append("<IR_AUTHORS>=").append(wordPoJo.getAuthor()).append("\n");
+                stringBuilder.append("<IR_CHANNEL>=").append(wordPoJo.getSection()).append("\n");
+                stringBuilder.append("<IR_KEYWORDS>=").append(wordPoJo.getKeyword()).append("\n");
+
+                stringBuilder.append("<SY_URLTIME_YMD>=").append(localDateTime.format(dateTimeFormatter2)).append("\n");
+                stringBuilder.append("<SY_URLTIME_YEAR>=").append(localDateTime.getYear()).append("\n");
+                stringBuilder.append("<SY_URLTIME_YM>=").append(localDateTime.getYear()).append(".").append(localDateTime.getMonthValue()).append("\n");
+                stringBuilder.append("<SY_URLTIME_YMDH>=").append(localDateTime.getYear()).append(".").append(localDateTime.getMonthValue()).append(".").append(localDateTime.getDayOfMonth()).append(" ").append(localDateTime.getHour()).append("\n");
+            }else {
+                System.out.println("失败"+wordPoJo.getIssue());
+            }
         }
-        Path path = Paths.get("F:\\TRS\\TRS项目\\教育报\\教育改革情报word\\tt\\教育改革情报抽取.trs");
+        Path path = Paths.get("F:\\TRS\\TRS项目\\教育报\\trs\\教育改革情报抽取1.trs");
         try {
             Files.createDirectories(path.getParent());
             Files.deleteIfExists(path);
